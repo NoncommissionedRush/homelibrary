@@ -1,5 +1,5 @@
 import express from "express";
-import router from "./routes/router.js";
+import router from "./server/routes/router.js";
 import session from "express-session";
 import { sessionConfig } from "./config.js";
 import "dotenv/config";
