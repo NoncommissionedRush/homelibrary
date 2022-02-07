@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
-import EditBookForm from "./EditBookForm";
 import Card from "./Card";
+import EditBookForm from "./EditBookForm";
 
 function BookListItem(props) {
   const { index, book, editBook, deleteBook, isLoggedIn } = props;
@@ -14,7 +14,10 @@ function BookListItem(props) {
   return (
     <Accordion.Item eventKey={index}>
       <Accordion.Header>
-        <b>{book.title}</b>&nbsp;({book.author})
+        <div className="d-flex flex-column">
+          <b style={{ marginBottom: "5px" }}>{book.title} </b>
+          <span>({book.author})</span>
+        </div>
       </Accordion.Header>
       <Accordion.Body>
         {isEditing ? (
