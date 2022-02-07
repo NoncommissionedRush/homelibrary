@@ -46,7 +46,7 @@ function EditBookForm(props) {
           <Form.Check
             type="checkbox"
             id="checkbox-bedo"
-            label="Bedo"
+            label="Beďo"
             checked={editFormData["checkbox-bedo"]}
             onChange={handleChange}
             style={{ marginRight: "1rem" }}
@@ -68,10 +68,10 @@ function EditBookForm(props) {
           }}
           variant="primary"
         >
-          Submit
+          Uložiť
         </Button>
         <Button onClick={toggleEdit} variant="danger" className="mt-1">
-          Cancel
+          Zrušiť
         </Button>
       </div>
     </div>

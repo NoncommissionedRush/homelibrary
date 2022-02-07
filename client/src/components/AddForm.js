@@ -9,6 +9,7 @@ function AddForm(props) {
     author: "",
     note: "",
   });
+  const [error, setError] = useState(false);
 
   const { title, author, note } = formData;
   const { setAllBooks } = props;
@@ -26,7 +27,13 @@ function AddForm(props) {
       },
     };
 
-    await axios.post("/book", formData, config);
+    const result = await axios.post("/book", formData, config);
+
+    if (result.data.errorMessage) {
+      setError(true);
+      return;
+    }
+
     setAllBooks((prevValue) => {
       return [...prevValue, formData];
     });
@@ -45,38 +52,42 @@ function AddForm(props) {
       }}
     >
       <Form.Group className="mb-3" controlId="title">
-        <Form.Label>Book title</Form.Label>
+        <Form.Label>Názov knihy</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Enter book title"
+          placeholder="Názov knižky sem"
           value={title}
           onChange={(e) => handleChange(e)}
+          style={error ? { borderColor: "#ff2e2e" } : null}
         />
+        {error && (
+          <Form.Text style={{ color: "#ff2e2e" }}>Title is required</Form.Text>
+        )}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="author">
-        <Form.Label>Author</Form.Label>
+        <Form.Label>Meno autora</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Enter book author"
+          placeholder="Meno autora sem"
           value={author}
           onChange={(e) => handleChange(e)}
         />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="note">
-        <Form.Label>Note</Form.Label>
+        <Form.Label>Poznámka</Form.Label>
         <Form.Control
           as="textarea"
           rows={3}
-          placeholder="Add note"
+          placeholder="Poznámka sem"
           value={note}
           onChange={(e) => handleChange(e)}
         />
       </Form.Group>
 
       <Button variant="primary" type="submit">
-        Submit
+        Uložiť
       </Button>
     </Form>
   );

@@ -55,9 +55,12 @@ function SearchBar(props) {
     <Fragment>
       <Form>
         <InputGroup className="mb-3">
-          <FormControl placeholder="Search" onChange={stringFilter} />
+          <FormControl
+            placeholder="Hľadaj v názve knihy alebo mene autora"
+            onChange={stringFilter}
+          />
           <Button variant="outline-secondary" id="button-addon2">
-            Search
+            Hľadať
           </Button>
         </InputGroup>
       </Form>
@@ -70,7 +73,7 @@ function SearchBar(props) {
           onChange={changeRadio}
           style={{ marginRight: "0.3rem" }}
         />
-        Bedo
+        Beďove prečítané
       </label>
       <label>
         <input
@@ -81,7 +84,7 @@ function SearchBar(props) {
           onChange={changeRadio}
           style={{ marginRight: "0.3rem" }}
         />
-        Zuzka
+        Zuzkine prečítané
       </label>
     </Fragment>
   );

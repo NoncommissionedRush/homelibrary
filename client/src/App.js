@@ -69,14 +69,16 @@ function App() {
           getAllBooks={getAllBooks}
         />
       </Container>
-      <Fab
-        color={showAddForm ? "secondary" : "primary"}
-        className="position-fixed"
-        style={{ bottom: "20px", right: "20px" }}
-        onClick={toggleShowAddForm}
-      >
-        {showAddForm ? <CancelIcon /> : <AddIcon />}
-      </Fab>
+      {isLoggedIn && (
+        <Fab
+          color={showAddForm ? "secondary" : "primary"}
+          className="position-fixed"
+          style={{ bottom: "20px", right: "20px" }}
+          onClick={toggleShowAddForm}
+        >
+          {showAddForm ? <CancelIcon /> : <AddIcon />}
+        </Fab>
+      )}
     </div>
   );
 }

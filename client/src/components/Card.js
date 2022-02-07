@@ -11,13 +11,13 @@ function Card(props) {
       readString = null;
       break;
     case 1:
-      readString = "Bedo";
+      readString = "Beďo";
       break;
     case 2:
       readString = "Zuzka";
       break;
     case 3:
-      readString = "Bedo, Zuzka";
+      readString = "Beďo, Zuzka";
       break;
     default:
       readString = null;
@@ -27,10 +27,10 @@ function Card(props) {
     <div className="d-flex justify-content-between">
       <div>
         <p>
-          <b>note:</b> <i>{book.note}</i>
+          <b>Poznámka:</b> <i>{book.note}</i>
         </p>
         <p>
-          <b>read:</b> <i>{readString}</i>
+          <b>Prečítali:</b> <i>{readString}</i>
         </p>
       </div>
       {isLoggedIn && (
@@ -42,10 +42,10 @@ function Card(props) {
             variant="primary"
             className="mb-1"
           >
-            Edit
+            Upraviť
           </Button>
           <Button onClick={() => deleteBook(book.id)} variant="danger">
-            Delete
+            Zmazať
           </Button>
         </div>
       )}

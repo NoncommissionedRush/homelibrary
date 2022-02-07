@@ -17,17 +17,17 @@ function NavigationBar(props) {
       variant="dark"
       className="mb-5 px-3 d-flex justify-content-between"
     >
-      <Navbar.Brand>Bedova kniznica</Navbar.Brand>
+      <Navbar.Brand>Beďova a Zuzkina Knižnica</Navbar.Brand>
       {props.isLoggedIn ? (
         <Nav>
           <Nav.Link href="#home" onClick={logout}>
-            Logout
+            Odhlásiť
           </Nav.Link>
         </Nav>
       ) : (
         <Nav>
           <Nav.Link href="#" onClick={props.setShowLoginForm}>
-            Login
+            Prihlásiť
           </Nav.Link>
         </Nav>
       )}

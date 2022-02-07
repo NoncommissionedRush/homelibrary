@@ -7,6 +7,7 @@ import axios from "axios";
 function LoginForm(props) {
   const { setIsLoggedIn, setShowLoginForm } = props;
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     password: "",
@@ -25,13 +26,17 @@ function LoginForm(props) {
       },
     };
 
-    const user = await axios.post("/login", formData, config);
+    const response = await axios.post("/login", formData, config);
 
-    if (user.data) {
-      setShowLoginForm(false);
-      setIsLoggedIn(true);
-    } else {
+    if (response.data.errorMessage) {
       setShowError(true);
+      setErrorMessage(response.data.errorMessage);
+      return;
+    }
+
+    if (response.data.id) {
+      setIsLoggedIn(true);
+      setShowLoginForm(false);
     }
   };
 
@@ -65,7 +70,7 @@ function LoginForm(props) {
         id="login-form"
       >
         <Form.Group className="mb-3" controlId="name">
-          <Form.Label>Username</Form.Label>
+          <Form.Label>Meno</Form.Label>
           <Form.Control
             type="text"
             value={formData.name}
@@ -73,14 +78,14 @@ function LoginForm(props) {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="password">
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Heslo</Form.Label>
           <Form.Control
             type="password"
             value={formData.password}
             onChange={handleChange}
           />
         </Form.Group>
-        {showError && <Alert variant="danger">Invalid credentials!</Alert>}
+        {showError && <Alert variant="danger">{errorMessage}</Alert>}
         <Button
           style={{ alignSelf: "center" }}
           variant="primary"
@@ -89,7 +94,7 @@ function LoginForm(props) {
             setFormData({ name: "", password: "" });
           }}
         >
-          Login
+          Prihlásiť
         </Button>
       </Form>
     </Fragment>
