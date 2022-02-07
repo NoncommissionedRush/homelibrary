@@ -3,7 +3,7 @@ import pool from "./config.js";
 /** returns all books from the database */
 export const getBooks = (req, res) => {
   pool.query(
-    "SELECT book.id, book.title, book.note, book.read, author.name as author FROM book INNER JOIN author ON book.author_id=author.id ORDER BY id",
+    "SELECT book.id, book.title, book.note, book.read, author.name as author FROM book INNER JOIN author ON book.author_id=author.id ORDER BY lower(book.title)",
     (error, result) => {
       if (error) {
         throw error;
@@ -115,6 +115,9 @@ export const updateBook = async (req, res) => {
  */
 export const deleteBook = (req, res) => {
   const bookId = parseInt(req.params.id);
+  if (isNaN(bookId)) {
+    return res.send(false);
+  }
   pool.query("DELETE FROM book WHERE id = $1", [bookId], (error, result) => {
     if (error) {
       throw error;
