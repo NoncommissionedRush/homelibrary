@@ -37,7 +37,7 @@ function AddForm(props) {
     // add new book to all books and sort alphabetically case insensitively
     setAllBooks((prevValue) => {
       return [...prevValue, formData].sort((a, b) =>
-        a.localeCompare(b, undefined, { sensitivity: "base" })
+        a.title.localeCompare(b.title, "en", { sensitivity: "base" })
       );
     });
   };
