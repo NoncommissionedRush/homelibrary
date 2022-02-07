@@ -8,7 +8,12 @@ function BookList(props) {
     props;
 
   const deleteBook = async (id) => {
-    await axios.delete(`/book/${id}`);
+    const deletionSuccessful = await axios.delete(`/book/${id}`);
+
+    if (!deletionSuccessful) {
+      return;
+    }
+
     const updatedList = allBooks.filter((book) => book.id !== id);
     setAllBooks(updatedList);
   };
