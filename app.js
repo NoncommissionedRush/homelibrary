@@ -3,6 +3,7 @@ import router from "./routes/router.js";
 import session from "express-session";
 import { sessionConfig } from "./config.js";
 import "dotenv/config";
+import * as path from "path";
 
 const PORT = process.env.PORT || 5000;
 
