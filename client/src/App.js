@@ -16,6 +16,7 @@ function App() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false);
+  const [counter, setCounter] = useState(0);
 
   useEffect(() => {
     getAllBooks();
@@ -25,6 +26,10 @@ function App() {
   useEffect(() => {
     setDisplayedBooks(allBooks);
   }, [allBooks]);
+
+  useEffect(() => {
+    setCounter(displayedBooks.length);
+  }, [displayedBooks]);
 
   async function getAllBooks() {
     const response = await axios.get("/books");
@@ -60,7 +65,14 @@ function App() {
         {showAddForm && (
           <AddForm setAllBooks={setAllBooks} allBooks={allBooks} />
         )}
-        <SearchBar setDisplayedBooks={setDisplayedBooks} allBooks={allBooks} />
+        <SearchBar
+          setCounter={setCounter}
+          setDisplayedBooks={setDisplayedBooks}
+          allBooks={allBooks}
+        />
+        <p className="m-2">
+          Spolu <b>{counter}</b> kníh
+        </p>
         <BookList
           isLoggedIn={isLoggedIn}
           displayedBooks={displayedBooks}
