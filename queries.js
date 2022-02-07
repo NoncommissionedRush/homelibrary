@@ -35,8 +35,20 @@ const addNewAuthorToDatabase = async (name) => {
  * @return {Object} new book object
  */
 export const createBook = async (req, res) => {
-  const { title, author, note, read } = req.body;
+  let { title, author, note, read } = req.body;
   let authorId;
+  title = title.trim();
+  author = author.trim();
+
+  if (!title) {
+    return res.send({
+      errorMessage: "Title can not be empty",
+    });
+  }
+
+  if (!author) {
+    author = "Neznámy autor";
+  }
 
   try {
     const existingAuthor = await pool.query(
