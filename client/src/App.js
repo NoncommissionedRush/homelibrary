@@ -1,8 +1,9 @@
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { CircularProgress } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import Container from "react-bootstrap/Container";
 import AddForm from "./components/AddForm";
 import BookList from "./components/BookList";
@@ -17,6 +18,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getAllBooks();
@@ -32,7 +34,11 @@ function App() {
   }, [displayedBooks]);
 
   async function getAllBooks() {
+    await new Promise((r) => setTimeout(r, 3000));
     const response = await axios.get("/books");
+    if (response) {
+      setIsLoading(false);
+    }
     setAllBooks(response.data);
     setDisplayedBooks(response.data);
   }
@@ -70,16 +76,29 @@ function App() {
           setDisplayedBooks={setDisplayedBooks}
           allBooks={allBooks}
         />
-        <p className="m-2">
-          Spolu <b>{counter}</b> kníh
-        </p>
-        <BookList
-          isLoggedIn={isLoggedIn}
-          displayedBooks={displayedBooks}
-          allBooks={allBooks}
-          setAllBooks={setAllBooks}
-          getAllBooks={getAllBooks}
-        />
+        {isLoading ? (
+          <CircularProgress
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
+            }}
+          />
+        ) : (
+          <Fragment>
+            <p className="m-2">
+              Spolu <b>{counter}</b> kníh
+            </p>
+            <BookList
+              isLoggedIn={isLoggedIn}
+              displayedBooks={displayedBooks}
+              allBooks={allBooks}
+              setAllBooks={setAllBooks}
+              getAllBooks={getAllBooks}
+            />
+          </Fragment>
+        )}
       </Container>
       {isLoggedIn && (
         <Fab
