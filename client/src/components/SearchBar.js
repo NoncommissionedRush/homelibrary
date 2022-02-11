@@ -68,7 +68,7 @@ function SearchBar(props) {
         <input
           type="checkbox"
           value={1}
-          name="hovno"
+          name="displayread"
           data-name="bedo"
           onChange={changeRadio}
           style={{ marginRight: "0.3rem" }}
@@ -79,7 +79,7 @@ function SearchBar(props) {
         <input
           type="checkbox"
           value={2}
-          name="hovno"
+          name="displayread"
           data-name="zuzka"
           onChange={changeRadio}
           style={{ marginRight: "0.3rem" }}

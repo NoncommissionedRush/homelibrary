@@ -34,7 +34,6 @@ function App() {
   }, [displayedBooks]);
 
   async function getAllBooks() {
-    await new Promise((r) => setTimeout(r, 3000));
     const response = await axios.get("/books");
     if (response) {
       setIsLoading(false);
@@ -77,14 +76,16 @@ function App() {
           allBooks={allBooks}
         />
         {isLoading ? (
-          <CircularProgress
+          <div
             style={{
               position: "absolute",
               top: "50%",
               left: "50%",
               transform: "translate(-50%,-50%)",
             }}
-          />
+          >
+            <CircularProgress />
+          </div>
         ) : (
           <Fragment>
             <p className="m-2">
