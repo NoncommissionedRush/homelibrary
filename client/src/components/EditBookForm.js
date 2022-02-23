@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import axios from "axios";
 
 function EditBookForm(props) {
   const { toggleEdit, book, editBook } = props;
@@ -16,6 +17,22 @@ function EditBookForm(props) {
     let key = e.target.id;
     let value = e.target.value === "on" ? e.target.checked : e.target.value;
     setEditFormData({ ...editFormData, [key]: value });
+  };
+
+  const deleteTag = async (e, tag) => {
+    e.preventDefault();
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    const formData = {
+      tagName: tag,
+    };
+
+    await axios.delete(`/book_tag/${book.id}`, {
+      headers: headers,
+      data: formData,
+    });
   };
 
   return (
@@ -58,6 +75,20 @@ function EditBookForm(props) {
             checked={editFormData["checkbox-zuzka"]}
             onChange={handleChange}
           />
+        </div>
+        <div className="d-flex my-2">
+          {book.tags.map((tag, index) => (
+            <Button
+              size="sm"
+              variant="danger"
+              key={index}
+              style={{ marginRight: ".2rem" }}
+              onClick={(e) => deleteTag(e, tag)}
+            >
+              {tag} X
+            </Button>
+          ))}
+          <input type="text"></input>
         </div>
       </Form>
       <div className="d-flex flex-column">
