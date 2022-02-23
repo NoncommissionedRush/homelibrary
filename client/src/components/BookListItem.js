@@ -4,7 +4,7 @@ import Card from "./Card";
 import EditBookForm from "./EditBookForm";
 
 function BookListItem(props) {
-  const { index, book, editBook, deleteBook, isLoggedIn } = props;
+  const { index, book, editBook, deleteBook, isLoggedIn, setTags } = props;
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => {
@@ -32,6 +32,7 @@ function BookListItem(props) {
             isLoggedIn={isLoggedIn}
             toggleEdit={toggleEdit}
             deleteBook={deleteBook}
+            setTags={setTags}
           />
         )}
       </Accordion.Body>

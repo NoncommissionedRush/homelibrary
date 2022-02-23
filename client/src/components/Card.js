@@ -1,8 +1,9 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
+import Tag from "./Tag";
 
 function Card(props) {
-  const { toggleEdit, book, isLoggedIn, deleteBook } = props;
+  const { toggleEdit, book, isLoggedIn, deleteBook, setTags } = props;
 
   let readString;
 
@@ -32,6 +33,10 @@ function Card(props) {
         <p>
           <b>Prečítali:</b> <i>{readString}</i>
         </p>
+        {book.tags.map(
+          (tag, index) =>
+            tag && <Tag setTags={setTags} tagName={tag} key={index} />
+        )}
       </div>
       {isLoggedIn && (
         <div className="d-flex flex-column">

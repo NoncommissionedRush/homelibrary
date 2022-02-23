@@ -4,8 +4,14 @@ import Accordion from "react-bootstrap/Accordion";
 import BookListItem from "./BookListItem";
 
 function BookList(props) {
-  const { displayedBooks, allBooks, setAllBooks, getAllBooks, isLoggedIn } =
-    props;
+  const {
+    displayedBooks,
+    allBooks,
+    setAllBooks,
+    getAllBooks,
+    isLoggedIn,
+    setTags,
+  } = props;
 
   const deleteBook = async (id) => {
     const deletionSuccessful = await axios.delete(`/book/${id}`);
@@ -57,6 +63,7 @@ function BookList(props) {
           editBook={editBook}
           deleteBook={() => deleteBook(book.id)}
           isLoggedIn={isLoggedIn}
+          setTags={setTags}
         />
       ))}
     </Accordion>
