@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
+import { connect } from "react-redux";
+import { addBook } from "../actions/bookActions";
 
 function AddForm(props) {
+  const { addBook } = props;
+
   const [formData, setFormData] = useState({
     title: "",
     author: "",
@@ -12,48 +15,24 @@ function AddForm(props) {
   const [error, setError] = useState(false);
 
   const { title, author, note } = formData;
-  const { setAllBooks } = props;
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   }
 
-  const addBook = async (e, formData) => {
+  function handleFormSubmit(e) {
     e.preventDefault();
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const result = await axios.post("/book", formData, config);
-
-    if (result.data.errorMessage) {
-      setError(true);
-      return;
-    }
-
-    // add new book to all books and sort alphabetically case insensitively
-    setAllBooks((prevValue) => {
-      return [...prevValue, formData].sort((a, b) =>
-        a.title.localeCompare(b.title, "en", { sensitivity: "base" })
-      );
+    const result = addBook(formData);
+    setError(!result);
+    setFormData({
+      title: "",
+      author: "",
+      note: "",
     });
-  };
+  }
 
   return (
-    <Form
-      className="mb-5"
-      onSubmit={(e) => {
-        addBook(e, formData);
-        setFormData({
-          title: "",
-          author: "",
-          note: "",
-        });
-      }}
-    >
+    <Form className="mb-5" onSubmit={handleFormSubmit}>
       <Form.Group className="mb-3" controlId="title">
         <Form.Label>Názov knihy</Form.Label>
         <Form.Control
@@ -96,4 +75,4 @@ function AddForm(props) {
   );
 }
 
-export default AddForm;
+export default connect(null, { addBook })(AddForm);
