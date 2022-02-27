@@ -3,6 +3,7 @@ import {
   GET_BOOKS,
   SET_READ_INDEX,
   ADD_BOOK,
+  DELETE_BOOK,
 } from "../actions/types";
 
 const initialState = {
@@ -51,6 +52,11 @@ const booksReducer = (state = initialState, action) => {
         books: [...state.books, action.payload].sort((a, b) =>
           a.title.localeCompare(b.title, "en", { sensitivity: "base" })
         ),
+      };
+    case DELETE_BOOK:
+      return {
+        ...state,
+        books: state.books.filter((book) => book.id !== action.payload),
       };
     case SET_FILTER:
       return {

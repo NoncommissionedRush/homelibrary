@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import BookListItem from "./BookListItem";
 import { connect } from "react-redux";
-import { getBooks } from "../actions/bookActions";
+import { getBooks, deleteBook } from "../actions/bookActions";
 import { filterBooks } from "../reducers/booksReducer";
 
 const mapStateToProps = (state) => {
@@ -16,13 +16,12 @@ const mapStateToProps = (state) => {
 
 function BookList(props) {
   const {
-    allBooks,
-    setAllBooks,
     getAllBooks,
     isLoggedIn,
     setTags,
     filterTags,
     getBooks,
+    deleteBook,
     books,
     filter,
     readIndex,
@@ -31,17 +30,6 @@ function BookList(props) {
   useEffect(() => {
     getBooks();
   }, [getBooks]);
-
-  const deleteBook = async (id) => {
-    const deletionSuccessful = await axios.delete(`/book/${id}`);
-
-    if (!deletionSuccessful) {
-      return;
-    }
-
-    const updatedList = allBooks.filter((book) => book.id !== id);
-    setAllBooks(updatedList);
-  };
 
   const editBook = async (id, editFormData) => {
     const config = {
@@ -90,4 +78,4 @@ function BookList(props) {
   );
 }
 
-export default connect(mapStateToProps, { getBooks })(BookList);
+export default connect(mapStateToProps, { getBooks, deleteBook })(BookList);

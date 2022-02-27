@@ -1,4 +1,10 @@
-import { ADD_BOOK, GET_BOOKS, SET_FILTER, SET_READ_INDEX } from "./types";
+import {
+  ADD_BOOK,
+  DELETE_BOOK,
+  GET_BOOKS,
+  SET_FILTER,
+  SET_READ_INDEX,
+} from "./types";
 import axios from "axios";
 
 export const getBooks = () => async (dispatch) => {
@@ -30,6 +36,17 @@ export const addBook = (formData) => async (dispatch) => {
   });
 
   return true;
+};
+
+export const deleteBook = (id) => async (dispatch) => {
+  const deletionSuccessful = await axios.delete(`/book/${id}`);
+
+  if (!deletionSuccessful) return;
+
+  dispatch({
+    type: DELETE_BOOK,
+    payload: id,
+  });
 };
 
 export const setFilter = (filterString) => (dispatch) => {
