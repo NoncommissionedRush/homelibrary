@@ -1,18 +1,36 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import BookListItem from "./BookListItem";
+import { connect } from "react-redux";
+import { getBooks } from "../actions/bookActions";
+import { filterBooks } from "../reducers/booksReducer";
+
+const mapStateToProps = (state) => {
+  return {
+    books: state.books.books,
+    filter: state.books.filter,
+    readIndex: state.books.readIndex,
+  };
+};
 
 function BookList(props) {
   const {
-    displayedBooks,
     allBooks,
     setAllBooks,
     getAllBooks,
     isLoggedIn,
     setTags,
     filterTags,
+    getBooks,
+    books,
+    filter,
+    readIndex,
   } = props;
+
+  useEffect(() => {
+    getBooks();
+  }, [getBooks]);
 
   const deleteBook = async (id) => {
     const deletionSuccessful = await axios.delete(`/book/${id}`);
@@ -56,7 +74,7 @@ function BookList(props) {
   };
   return (
     <Accordion defaultActiveKey="0" style={{ marginTop: "1rem" }}>
-      {displayedBooks.map((book, index) => (
+      {filterBooks(books, filter, readIndex).map((book, index) => (
         <BookListItem
           key={index}
           index={index}
@@ -72,4 +90,4 @@ function BookList(props) {
   );
 }
 
-export default React.memo(BookList);
+export default connect(mapStateToProps, { getBooks })(BookList);
