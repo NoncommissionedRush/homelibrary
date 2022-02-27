@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   ADD_BOOK,
   DELETE_BOOK,
@@ -5,7 +6,6 @@ import {
   SET_FILTER,
   SET_READ_INDEX,
 } from "./types";
-import axios from "axios";
 
 export const getBooks = () => async (dispatch) => {
   const response = await axios.get("/books");
@@ -47,6 +47,37 @@ export const deleteBook = (id) => async (dispatch) => {
     type: DELETE_BOOK,
     payload: id,
   });
+};
+
+export const editBook = (id, editFormData) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let read;
+
+  if (editFormData["checkbox-bedo"] && editFormData["checkbox-zuzka"]) {
+    read = 3;
+  } else if (editFormData["checkbox-zuzka"]) {
+    read = 2;
+  } else if (editFormData["checkbox-bedo"]) {
+    read = 1;
+  } else {
+    read = 0;
+  }
+
+  const data = {
+    title: editFormData.title,
+    author: editFormData.author,
+    note: editFormData.note,
+    read: read,
+  };
+
+  await axios.put(`/book/${id}`, data, config);
+
+  dispatch(getBooks());
 };
 
 export const setFilter = (filterString) => (dispatch) => {

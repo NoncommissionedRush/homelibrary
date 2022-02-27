@@ -31,13 +31,13 @@ const updateBook = async (req, res) => {
       [title, authorId, note, read, bookId]
     );
 
-    const bookId = updatedBook.rows[0].id;
+    const updatedBookId = updatedBook.rows[0].id;
 
     if (tag) {
-      addTagToBook(tag, bookId);
+      addTagToBook(tag, updatedBookId);
     }
 
-    res.send(bookId.toString());
+    res.send(updatedBookId.toString());
   } catch (error) {
     console.log(error);
   }

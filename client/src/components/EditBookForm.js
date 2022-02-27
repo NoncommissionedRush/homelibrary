@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Tag from "./Tag";
+import { connect } from "react-redux";
+import { editBook } from "../actions/bookActions";
 
 function EditBookForm(props) {
   const { toggleEdit, book, editBook } = props;
@@ -139,4 +141,4 @@ function EditBookForm(props) {
   );
 }
 
-export default EditBookForm;
+export default connect(null, { editBook })(EditBookForm);

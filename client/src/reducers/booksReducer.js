@@ -1,9 +1,9 @@
 import {
-  SET_FILTER,
-  GET_BOOKS,
-  SET_READ_INDEX,
   ADD_BOOK,
   DELETE_BOOK,
+  GET_BOOKS,
+  SET_FILTER,
+  SET_READ_INDEX,
 } from "../actions/types";
 
 const initialState = {
