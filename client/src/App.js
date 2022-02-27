@@ -10,6 +10,8 @@ import BookList from "./components/BookList";
 import NavigationBar from "./components/NavigationBar";
 import SearchBar from "./components/SearchBar";
 import LoginForm from "./components/LoginForm";
+import { Provider } from "react-redux";
+import store from "./store";
 
 function App() {
   const [allBooks, setAllBooks] = useState([]);
@@ -55,68 +57,70 @@ function App() {
   }
 
   return (
-    <div className="App">
-      {showLoginForm && (
-        <LoginForm
-          setIsLoggedIn={setIsLoggedIn}
+    <Provider store={store}>
+      <div className="App">
+        {showLoginForm && (
+          <LoginForm
+            setIsLoggedIn={setIsLoggedIn}
+            setShowLoginForm={setShowLoginForm}
+          />
+        )}
+        <NavigationBar
           setShowLoginForm={setShowLoginForm}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
         />
-      )}
-      <NavigationBar
-        setShowLoginForm={setShowLoginForm}
-        isLoggedIn={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-      />
-      <Container>
-        {showAddForm && (
-          <AddForm setAllBooks={setAllBooks} allBooks={allBooks} />
-        )}
-        <SearchBar
-          setCounter={setCounter}
-          setDisplayedBooks={setDisplayedBooks}
-          allBooks={allBooks}
-          tags={filterTags}
-          setTags={setFilterTags}
-        />
-        {isLoading ? (
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%,-50%)",
-            }}
+        <Container>
+          {showAddForm && (
+            <AddForm setAllBooks={setAllBooks} allBooks={allBooks} />
+          )}
+          <SearchBar
+            setCounter={setCounter}
+            setDisplayedBooks={setDisplayedBooks}
+            allBooks={allBooks}
+            tags={filterTags}
+            setTags={setFilterTags}
+          />
+          {isLoading ? (
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%,-50%)",
+              }}
+            >
+              <CircularProgress />
+            </div>
+          ) : (
+            <Fragment>
+              <p className="m-2">
+                Spolu <b>{counter}</b> kníh
+              </p>
+              <BookList
+                isLoggedIn={isLoggedIn}
+                displayedBooks={displayedBooks}
+                allBooks={allBooks}
+                setAllBooks={setAllBooks}
+                getAllBooks={getAllBooks}
+                setTags={setFilterTags}
+                filterTags={filterTags}
+              />
+            </Fragment>
+          )}
+        </Container>
+        {isLoggedIn && (
+          <Fab
+            color={showAddForm ? "secondary" : "primary"}
+            className="position-fixed"
+            style={{ bottom: "20px", right: "20px" }}
+            onClick={toggleShowAddForm}
           >
-            <CircularProgress />
-          </div>
-        ) : (
-          <Fragment>
-            <p className="m-2">
-              Spolu <b>{counter}</b> kníh
-            </p>
-            <BookList
-              isLoggedIn={isLoggedIn}
-              displayedBooks={displayedBooks}
-              allBooks={allBooks}
-              setAllBooks={setAllBooks}
-              getAllBooks={getAllBooks}
-              setTags={setFilterTags}
-              filterTags={filterTags}
-            />
-          </Fragment>
+            {showAddForm ? <CancelIcon /> : <AddIcon />}
+          </Fab>
         )}
-      </Container>
-      {isLoggedIn && (
-        <Fab
-          color={showAddForm ? "secondary" : "primary"}
-          className="position-fixed"
-          style={{ bottom: "20px", right: "20px" }}
-          onClick={toggleShowAddForm}
-        >
-          {showAddForm ? <CancelIcon /> : <AddIcon />}
-        </Fab>
-      )}
-    </div>
+      </div>
+    </Provider>
   );
 }
 
