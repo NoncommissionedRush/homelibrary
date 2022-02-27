@@ -14,7 +14,7 @@ import LoginForm from "./components/LoginForm";
 function App() {
   const [allBooks, setAllBooks] = useState([]);
   const [displayedBooks, setDisplayedBooks] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [filterTags, setFilterTags] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -75,8 +75,8 @@ function App() {
           setCounter={setCounter}
           setDisplayedBooks={setDisplayedBooks}
           allBooks={allBooks}
-          tags={tags}
-          setTags={setTags}
+          tags={filterTags}
+          setTags={setFilterTags}
         />
         {isLoading ? (
           <div
@@ -100,7 +100,8 @@ function App() {
               allBooks={allBooks}
               setAllBooks={setAllBooks}
               getAllBooks={getAllBooks}
-              setTags={setTags}
+              setTags={setFilterTags}
+              filterTags={filterTags}
             />
           </Fragment>
         )}

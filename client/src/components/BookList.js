@@ -11,6 +11,7 @@ function BookList(props) {
     getAllBooks,
     isLoggedIn,
     setTags,
+    filterTags,
   } = props;
 
   const deleteBook = async (id) => {
@@ -64,6 +65,7 @@ function BookList(props) {
           deleteBook={() => deleteBook(book.id)}
           isLoggedIn={isLoggedIn}
           setTags={setTags}
+          filterTags={filterTags}
         />
       ))}
     </Accordion>

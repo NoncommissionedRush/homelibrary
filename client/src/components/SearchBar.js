@@ -34,9 +34,7 @@ function SearchBar(props) {
           })
           .filter((book) => {
             if (tags.length === 0) return book;
-            return book.tags.some((tag) => {
-              return tags.includes(tag);
-            });
+            return tags.every((tag) => book.tags.includes(tag));
           })
       );
     },

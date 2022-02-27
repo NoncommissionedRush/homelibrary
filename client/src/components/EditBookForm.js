@@ -1,10 +1,14 @@
+import axios from "axios";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import axios from "axios";
+import Tag from "./Tag";
 
 function EditBookForm(props) {
   const { toggleEdit, book, editBook } = props;
+  const [displayedTags, setDisplayedTags] = useState(book.tags);
+  const [newTagName, setNewTagName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [editFormData, setEditFormData] = useState({
     title: book.title,
     author: book.author,
@@ -13,26 +17,45 @@ function EditBookForm(props) {
     "checkbox-zuzka": book.read === 2 || book.read === 3,
   });
 
-  const handleChange = (e) => {
+  const handleFormChange = (e) => {
     let key = e.target.id;
     let value = e.target.value === "on" ? e.target.checked : e.target.value;
     setEditFormData({ ...editFormData, [key]: value });
   };
 
-  const deleteTag = async (e, tag) => {
-    e.preventDefault();
-    const headers = {
-      "Content-Type": "application/json",
-    };
+  const handleTagFormChange = (e) => {
+    setNewTagName(e.target.value);
+  };
 
-    const formData = {
-      tagName: tag,
-    };
+  const tagSubmit = async (e) => {
+    if (!isLoading && e.key === "Enter") {
+      // if the tag already exists do not add it
+      if (displayedTags.includes(newTagName)) {
+        console.log("jeb");
+        setNewTagName("");
+        return;
+      }
 
-    await axios.delete(`/book_tag/${book.id}`, {
-      headers: headers,
-      data: formData,
-    });
+      setIsLoading(true);
+      setDisplayedTags((prevValue) => [...prevValue, newTagName]);
+      setNewTagName("");
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const data = {
+        tagName: newTagName,
+      };
+
+      const result = await axios.post(`/book_tag/${book.id}`, data, config);
+
+      if (result) {
+        setIsLoading(false);
+      }
+    }
   };
 
   return (
@@ -41,21 +64,21 @@ function EditBookForm(props) {
         <Form.Group className="mb-3" controlId="title">
           <Form.Control
             type="text"
-            onChange={handleChange}
+            onChange={handleFormChange}
             value={editFormData.title}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="author">
           <Form.Control
             type="text"
-            onChange={handleChange}
+            onChange={handleFormChange}
             value={editFormData.author}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="note">
           <Form.Control
             as="textarea"
-            onChange={handleChange}
+            onChange={handleFormChange}
             value={editFormData.note}
           />
         </Form.Group>
@@ -65,7 +88,7 @@ function EditBookForm(props) {
             id="checkbox-bedo"
             label="Beďo"
             checked={editFormData["checkbox-bedo"]}
-            onChange={handleChange}
+            onChange={handleFormChange}
             style={{ marginRight: "1rem" }}
           />
           <Form.Check
@@ -73,22 +96,29 @@ function EditBookForm(props) {
             id="checkbox-zuzka"
             label="Zuzka"
             checked={editFormData["checkbox-zuzka"]}
-            onChange={handleChange}
+            onChange={handleFormChange}
           />
         </div>
         <div className="d-flex my-2">
-          {book.tags.map((tag, index) => (
-            <Button
-              size="sm"
-              variant="danger"
-              key={index}
-              style={{ marginRight: ".2rem" }}
-              onClick={(e) => deleteTag(e, tag)}
-            >
-              {tag} X
-            </Button>
-          ))}
-          <input type="text"></input>
+          {displayedTags.map((tag, index) =>
+            tag !== null ? (
+              <Tag
+                key={index}
+                tagName={tag}
+                edit={true}
+                setDisplayedTags={setDisplayedTags}
+                book={book}
+                isLoading={displayedTags[index + 1] ? false : isLoading}
+              />
+            ) : null
+          )}
+          <input
+            type="text"
+            value={newTagName}
+            onChange={handleTagFormChange}
+            onKeyDown={tagSubmit}
+            placeholder="pridať nový tag"
+          ></input>
         </div>
       </Form>
       <div className="d-flex flex-column">

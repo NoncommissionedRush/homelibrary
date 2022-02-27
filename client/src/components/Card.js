@@ -3,7 +3,8 @@ import Button from "react-bootstrap/Button";
 import Tag from "./Tag";
 
 function Card(props) {
-  const { toggleEdit, book, isLoggedIn, deleteBook, setTags } = props;
+  const { toggleEdit, book, isLoggedIn, deleteBook, setTags, filterTags } =
+    props;
 
   let readString;
 
@@ -35,7 +36,14 @@ function Card(props) {
         </p>
         {book.tags.map(
           (tag, index) =>
-            tag && <Tag setTags={setTags} tagName={tag} key={index} />
+            tag && (
+              <Tag
+                setTags={setTags}
+                tagName={tag}
+                key={index}
+                filterTags={filterTags}
+              />
+            )
         )}
       </div>
       {isLoggedIn && (
