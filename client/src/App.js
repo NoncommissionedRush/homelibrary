@@ -1,49 +1,26 @@
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { CircularProgress } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import axios from "axios";
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
+import { Provider } from "react-redux";
 import AddForm from "./components/AddForm";
 import BookList from "./components/BookList";
+import LoginForm from "./components/LoginForm";
 import NavigationBar from "./components/NavigationBar";
 import SearchBar from "./components/SearchBar";
-import LoginForm from "./components/LoginForm";
-import { Provider } from "react-redux";
 import store from "./store";
 
 function App() {
-  const [allBooks, setAllBooks] = useState([]);
-  const [displayedBooks, setDisplayedBooks] = useState([]);
   const [filterTags, setFilterTags] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false);
-  const [counter, setCounter] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getAllBooks();
     checkLogin();
   }, []);
-
-  useEffect(() => {
-    setDisplayedBooks(allBooks);
-  }, [allBooks]);
-
-  useEffect(() => {
-    setCounter(displayedBooks.length);
-  }, [displayedBooks]);
-
-  async function getAllBooks() {
-    const response = await axios.get("/books");
-    if (response) {
-      setIsLoading(false);
-    }
-    setAllBooks(response.data);
-    setDisplayedBooks(response.data);
-  }
 
   async function checkLogin() {
     const response = await axios.get("/me");
@@ -71,43 +48,14 @@ function App() {
           setIsLoggedIn={setIsLoggedIn}
         />
         <Container>
-          {showAddForm && (
-            <AddForm setAllBooks={setAllBooks} allBooks={allBooks} />
-          )}
-          <SearchBar
-            setCounter={setCounter}
-            setDisplayedBooks={setDisplayedBooks}
-            allBooks={allBooks}
-            tags={filterTags}
+          {showAddForm && <AddForm />}
+          <SearchBar tags={filterTags} setTags={setFilterTags} />
+
+          <BookList
+            isLoggedIn={isLoggedIn}
             setTags={setFilterTags}
+            filterTags={filterTags}
           />
-          {isLoading ? (
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%,-50%)",
-              }}
-            >
-              <CircularProgress />
-            </div>
-          ) : (
-            <Fragment>
-              <p className="m-2">
-                Spolu <b>{counter}</b> kníh
-              </p>
-              <BookList
-                isLoggedIn={isLoggedIn}
-                displayedBooks={displayedBooks}
-                allBooks={allBooks}
-                setAllBooks={setAllBooks}
-                getAllBooks={getAllBooks}
-                setTags={setFilterTags}
-                filterTags={filterTags}
-              />
-            </Fragment>
-          )}
         </Container>
         {isLoggedIn && (
           <Fab

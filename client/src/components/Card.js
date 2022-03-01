@@ -1,6 +1,8 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Tag from "./Tag";
+import { connect } from "react-redux";
+import { deleteBook } from "../actions/bookActions";
 
 function Card(props) {
   const { toggleEdit, book, isLoggedIn, deleteBook, setTags, filterTags } =
@@ -34,7 +36,7 @@ function Card(props) {
         <p>
           <b>Prečítali:</b> <i>{readString}</i>
         </p>
-        {book.tags.map(
+        {/* {book.tags.map(
           (tag, index) =>
             tag && (
               <Tag
@@ -44,7 +46,7 @@ function Card(props) {
                 filterTags={filterTags}
               />
             )
-        )}
+        )} */}
       </div>
       {isLoggedIn && (
         <div className="d-flex flex-column">
@@ -66,4 +68,4 @@ function Card(props) {
   );
 }
 
-export default React.memo(Card);
+export default connect(null, { deleteBook })(Card);

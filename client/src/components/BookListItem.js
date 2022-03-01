@@ -4,7 +4,7 @@ import Card from "./Card";
 import EditBookForm from "./EditBookForm";
 
 function BookListItem(props) {
-  const { index, book, deleteBook, isLoggedIn, setTags, filterTags } = props;
+  const { index, book, isLoggedIn, setTags, filterTags } = props;
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => {
@@ -27,7 +27,6 @@ function BookListItem(props) {
             book={book}
             isLoggedIn={isLoggedIn}
             toggleEdit={toggleEdit}
-            deleteBook={deleteBook}
             setTags={setTags}
             filterTags={filterTags}
           />

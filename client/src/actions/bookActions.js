@@ -7,6 +7,11 @@ import {
   SET_READ_INDEX,
 } from "./types";
 
+/**
+ * returns true if it successfully fetched data from server
+ *
+ * @returns Boolean
+ */
 export const getBooks = () => async (dispatch) => {
   const response = await axios.get("/books");
   if (response) {
@@ -14,7 +19,9 @@ export const getBooks = () => async (dispatch) => {
       type: GET_BOOKS,
       payload: response.data,
     });
+    return true;
   }
+  return false;
 };
 
 export const addBook = (formData) => async (dispatch) => {

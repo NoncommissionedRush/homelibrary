@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { editBook } from "../actions/bookActions";
 
 function EditBookForm(props) {
-  const { toggleEdit, book, editBook } = props;
+  const { toggleEdit, book } = props;
   const [displayedTags, setDisplayedTags] = useState(book.tags);
   const [newTagName, setNewTagName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
