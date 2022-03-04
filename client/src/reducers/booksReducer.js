@@ -1,26 +1,33 @@
 import {
   ADD_BOOK,
+  ADD_TAG,
   DELETE_BOOK,
+  DELETE_TAG,
+  EDIT_BOOK,
   GET_BOOKS,
   SET_FILTER,
-  SET_READ_INDEX,
 } from "../actions/types";
 
 const initialState = {
   books: [],
-  filter: "",
-  readIndex: 0,
+  filter: {
+    string: "",
+    readIndex: 0,
+    tags: [],
+  },
 };
 
-export const filterBooks = (books, filter, readIndex) => {
+export const filterBooks = (books, filter) => {
+  const filterString = filter.string.toLowerCase();
   return books
     .filter(
       (book) =>
-        book.author.toLowerCase().includes(filter.toLowerCase()) ||
-        book.title.toLowerCase().includes(filter.toLowerCase())
+        book.author.toLowerCase().includes(filterString) ||
+        book.title.toLowerCase().includes(filterString) ||
+        (book.note && book.note.toLowerCase().includes(filterString))
     )
     .filter((book) => {
-      switch (readIndex) {
+      switch (filter.readIndex) {
         case 0:
           return book;
         case 1:
@@ -32,11 +39,11 @@ export const filterBooks = (books, filter, readIndex) => {
         default:
           return book;
       }
+    })
+    .filter((book) => {
+      if (filter.tags.length === 0) return book;
+      return filter.tags.every((tag) => book.tags.includes(tag));
     });
-  // .filter((book) => {
-  //   if (tags.length === 0) return book;
-  //   return tags.every((tag) => book.tags.includes(tag));
-  // });
 };
 
 const booksReducer = (state = initialState, action) => {
@@ -53,6 +60,13 @@ const booksReducer = (state = initialState, action) => {
           a.title.localeCompare(b.title, "en", { sensitivity: "base" })
         ),
       };
+    case EDIT_BOOK:
+      return {
+        ...state,
+        books: state.books.map((book) =>
+          book.id === action.payload.id ? action.payload : book
+        ),
+      };
     case DELETE_BOOK:
       return {
         ...state,
@@ -61,12 +75,21 @@ const booksReducer = (state = initialState, action) => {
     case SET_FILTER:
       return {
         ...state,
-        filter: action.payload,
+        filter: Object.assign(state.filter, action.payload),
       };
-    case SET_READ_INDEX:
+    case ADD_TAG:
       return {
         ...state,
-        readIndex: action.payload,
+        books: state.books.map((book) =>
+          book.id === action.payload.id ? action.payload : book
+        ),
+      };
+    case DELETE_TAG:
+      return {
+        ...state,
+        books: state.books.map((book) =>
+          book.id === action.payload.id ? action.payload : book
+        ),
       };
     default:
       return state;

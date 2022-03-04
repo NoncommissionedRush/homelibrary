@@ -4,45 +4,54 @@ import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
 import { connect } from "react-redux";
-import { setFilter, setReadIndex } from "../actions/bookActions";
+import { setFilter } from "../actions/bookActions";
 import store from "../store";
 
+const mapStateToProps = (state) => {
+  return {
+    filterTags: state.books.filter.tags,
+  };
+};
+
 function SearchBar(props) {
-  const { setFilter, setReadIndex } = props;
+  const { setFilter, filterTags } = props;
 
   const selectReadIndex = (state) => {
-    return state.books.readIndex;
+    return state.books.filter.readIndex;
   };
 
   const changeRadio = async (e) => {
     const index = parseInt(e.target.value);
 
     if (e.target.checked) {
-      setReadIndex(selectReadIndex(store.getState()) + index);
+      setFilter({ readIndex: selectReadIndex(store.getState()) + index });
     } else {
-      setReadIndex(selectReadIndex(store.getState()) - index);
+      setFilter({ readIndex: selectReadIndex(store.getState()) - index });
     }
+  };
 
-    // searchFilter(searchString.current, readIndex.current);
+  const removeTagFromFilter = (tag) => {
+    setFilter({ tags: filterTags.filter((t) => t !== tag) });
   };
 
   return (
     <Fragment>
       <Form>
         <InputGroup className="mb-3">
-          {/* {tags.map((tag, index) => (
+          {filterTags.map((tag, index) => (
             <Button
               style={{ marginRight: ".2rem" }}
               size="sm"
               variant="secondary"
               key={index}
+              onClick={(e) => removeTagFromFilter(e.target.innerText)}
             >
               {tag}
             </Button>
-          ))} */}
+          ))}
           <FormControl
             placeholder="Hľadaj v názve knihy alebo mene autora"
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={(e) => setFilter({ string: e.target.value })}
           />
           <Button variant="outline-secondary" id="button-addon2">
             Hľadať
@@ -75,4 +84,4 @@ function SearchBar(props) {
   );
 }
 
-export default connect(null, { setFilter, setReadIndex })(SearchBar);
+export default connect(mapStateToProps, { setFilter })(SearchBar);

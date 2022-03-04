@@ -5,8 +5,7 @@ import { connect } from "react-redux";
 import { deleteBook } from "../actions/bookActions";
 
 function Card(props) {
-  const { toggleEdit, book, isLoggedIn, deleteBook, setTags, filterTags } =
-    props;
+  const { toggleEdit, book, isLoggedIn, deleteBook } = props;
 
   let readString;
 
@@ -36,17 +35,9 @@ function Card(props) {
         <p>
           <b>Prečítali:</b> <i>{readString}</i>
         </p>
-        {/* {book.tags.map(
-          (tag, index) =>
-            tag && (
-              <Tag
-                setTags={setTags}
-                tagName={tag}
-                key={index}
-                filterTags={filterTags}
-              />
-            )
-        )} */}
+        {book.tags.map(
+          (tag, index) => tag && <Tag tagName={tag} key={index} />
+        )}
       </div>
       {isLoggedIn && (
         <div className="d-flex flex-column">

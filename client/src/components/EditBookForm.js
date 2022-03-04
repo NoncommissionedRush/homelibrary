@@ -1,14 +1,12 @@
-import axios from "axios";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Tag from "./Tag";
 import { connect } from "react-redux";
-import { editBook } from "../actions/bookActions";
+import { addTag, editBook } from "../actions/bookActions";
 
 function EditBookForm(props) {
-  const { toggleEdit, book } = props;
-  const [displayedTags, setDisplayedTags] = useState(book.tags);
+  const { toggleEdit, book, addTag, editBook } = props;
   const [newTagName, setNewTagName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [editFormData, setEditFormData] = useState({
@@ -31,29 +29,9 @@ function EditBookForm(props) {
 
   const tagSubmit = async (e) => {
     if (!isLoading && e.key === "Enter") {
-      // if the tag already exists do not add it
-      if (displayedTags.includes(newTagName)) {
-        console.log("jeb");
-        setNewTagName("");
-        return;
-      }
-
       setIsLoading(true);
-      setDisplayedTags((prevValue) => [...prevValue, newTagName]);
       setNewTagName("");
-
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      const data = {
-        tagName: newTagName,
-      };
-
-      const result = await axios.post(`/book_tag/${book.id}`, data, config);
-
+      const result = await addTag(book.id, newTagName);
       if (result) {
         setIsLoading(false);
       }
@@ -102,16 +80,9 @@ function EditBookForm(props) {
           />
         </div>
         <div className="d-flex my-2">
-          {displayedTags.map((tag, index) =>
+          {book.tags.map((tag, index) =>
             tag !== null ? (
-              <Tag
-                key={index}
-                tagName={tag}
-                edit={true}
-                setDisplayedTags={setDisplayedTags}
-                book={book}
-                isLoading={displayedTags[index + 1] ? false : isLoading}
-              />
+              <Tag key={index} tagName={tag} edit={true} book={book} />
             ) : null
           )}
           <input
@@ -141,4 +112,4 @@ function EditBookForm(props) {
   );
 }
 
-export default connect(null, { editBook })(EditBookForm);
+export default connect(null, { addTag, editBook })(EditBookForm);

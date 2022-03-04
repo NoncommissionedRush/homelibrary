@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "./Card";
 import EditBookForm from "./EditBookForm";
 
-function BookListItem(props) {
-  const { index, book, isLoggedIn, setTags, filterTags } = props;
+const BookListItem = memo(function BookListItem(props) {
+  const { index, book, isLoggedIn } = props;
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => {
@@ -23,17 +23,11 @@ function BookListItem(props) {
         {isEditing ? (
           <EditBookForm toggleEdit={toggleEdit} book={book} />
         ) : (
-          <Card
-            book={book}
-            isLoggedIn={isLoggedIn}
-            toggleEdit={toggleEdit}
-            setTags={setTags}
-            filterTags={filterTags}
-          />
+          <Card book={book} isLoggedIn={isLoggedIn} toggleEdit={toggleEdit} />
         )}
       </Accordion.Body>
     </Accordion.Item>
   );
-}
+});
 
 export default BookListItem;

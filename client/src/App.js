@@ -13,7 +13,6 @@ import SearchBar from "./components/SearchBar";
 import store from "./store";
 
 function App() {
-  const [filterTags, setFilterTags] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -49,13 +48,9 @@ function App() {
         />
         <Container>
           {showAddForm && <AddForm />}
-          <SearchBar tags={filterTags} setTags={setFilterTags} />
+          <SearchBar />
 
-          <BookList
-            isLoggedIn={isLoggedIn}
-            setTags={setFilterTags}
-            filterTags={filterTags}
-          />
+          <BookList isLoggedIn={isLoggedIn} />
         </Container>
         {isLoggedIn && (
           <Fab

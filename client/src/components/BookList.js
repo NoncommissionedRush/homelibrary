@@ -8,16 +8,12 @@ import { CircularProgress } from "@mui/material";
 
 const mapStateToProps = (state) => {
   return {
-    displayedBooks: filterBooks(
-      state.books.books,
-      state.books.filter,
-      state.books.readIndex
-    ),
+    displayedBooks: filterBooks(state.books.books, state.books.filter),
   };
 };
 
 function BookList(props) {
-  const { isLoggedIn, setTags, filterTags, getBooks, displayedBooks } = props;
+  const { isLoggedIn, getBooks, displayedBooks } = props;
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,8 +48,6 @@ function BookList(props) {
             index={index}
             book={book}
             isLoggedIn={isLoggedIn}
-            setTags={setTags}
-            filterTags={filterTags}
           />
         ))}
       </Accordion>

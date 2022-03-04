@@ -1,13 +1,12 @@
 import pool from "../config.js";
 import addNewAuthorToDatabase from "./addAuthorToDb.js";
-import addTagToBook from "./addTagToBook.js";
 
 /** update existing book
  * @return {Integer} updated book's id
  */
 const updateBook = async (req, res) => {
   const bookId = parseInt(req.params.id);
-  let { title, author, note, read, tag } = req.body;
+  let { title, author, note, read } = req.body;
   let authorId;
 
   if (read === undefined) {
@@ -32,10 +31,6 @@ const updateBook = async (req, res) => {
     );
 
     const updatedBookId = updatedBook.rows[0].id;
-
-    if (tag) {
-      addTagToBook(tag, updatedBookId);
-    }
 
     res.send(updatedBookId.toString());
   } catch (error) {
