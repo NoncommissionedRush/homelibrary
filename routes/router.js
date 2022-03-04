@@ -1,5 +1,6 @@
 import express from "express";
 import getBooks from "../queries/getBooks.js";
+import getBook from "../queries/getBook.js";
 import createBook from "../queries/createBook.js";
 import updateBook from "../queries/updateBook.js";
 import deleteBook from "../queries/deleteBook.js";
@@ -11,6 +12,10 @@ const router = express.Router();
 //@route  GET /books
 //@desc get all books from database
 router.get("/books", getBooks);
+
+//@route  GET /book/id
+//@desc get book by id
+router.get("/book/:id", getBook);
 
 //@route  POST /book
 //@desc create new book
