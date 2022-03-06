@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Tag from "./Tag";
 import { connect } from "react-redux";
 import { deleteBook } from "../actions/bookActions";
+import Overlay from "./Overlay";
+import Confirm from "./Confirm";
 
-function Card(props) {
-  const { toggleEdit, book, isLoggedIn, deleteBook } = props;
-
+function Card({ toggleEdit, book, isLoggedIn, deleteBook }) {
+  const [showAlert, setShowAlert] = useState(false);
   let readString;
 
   switch (book.read) {
@@ -35,9 +36,7 @@ function Card(props) {
         <p>
           <b>Prečítali:</b> <i>{readString}</i>
         </p>
-        {book.tags.map(
-          (tag, index) => tag && <Tag tagName={tag} key={index} />
-        )}
+        {book.tags.map((tag) => tag && <Tag tagName={tag} key={tag.id} />)}
       </div>
       {isLoggedIn && (
         <div className="d-flex flex-column">
@@ -50,10 +49,15 @@ function Card(props) {
           >
             Upraviť
           </Button>
-          <Button onClick={() => deleteBook(book.id)} variant="danger">
+          <Button onClick={() => setShowAlert(true)} variant="danger">
             Zmazať
           </Button>
         </div>
+      )}
+      {showAlert && (
+        <Overlay toggleDisplay={setShowAlert}>
+          <Confirm confirmAction={() => deleteBook(book.id)} />
+        </Overlay>
       )}
     </div>
   );
