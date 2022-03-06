@@ -13,9 +13,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-function SearchBar(props) {
-  const { setFilter, filterTags } = props;
-
+function SearchBar({ setFilter, filterTags }) {
   const selectReadIndex = (state) => {
     return state.books.filter.readIndex;
   };

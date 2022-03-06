@@ -3,8 +3,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Card from "./Card";
 import EditBookForm from "./EditBookForm";
 
-const BookListItem = memo(function BookListItem(props) {
-  const { index, book, isLoggedIn } = props;
+const BookListItem = memo(function BookListItem({ book, isLoggedIn, index }) {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => {

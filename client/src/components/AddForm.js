@@ -4,17 +4,15 @@ import Button from "react-bootstrap/Button";
 import { connect } from "react-redux";
 import { addBook } from "../actions/bookActions";
 
-function AddForm(props) {
-  const { addBook } = props;
-
+function AddForm({ addBook }) {
   const [formData, setFormData] = useState({
     title: "",
     author: "",
     note: "",
   });
-  const [error, setError] = useState(false);
 
   const { title, author, note } = formData;
+  const [error, setError] = useState(false);
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -39,7 +37,7 @@ function AddForm(props) {
           type="text"
           placeholder="Názov knižky sem"
           value={title}
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
           style={error ? { borderColor: "#ff2e2e" } : null}
         />
         {error && (
@@ -53,7 +51,7 @@ function AddForm(props) {
           type="text"
           placeholder="Meno autora sem"
           value={author}
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
         />
       </Form.Group>
 
@@ -64,7 +62,7 @@ function AddForm(props) {
           rows={3}
           placeholder="Poznámka sem"
           value={note}
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
         />
       </Form.Group>
 

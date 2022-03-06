@@ -5,8 +5,7 @@ import Tag from "./Tag";
 import { connect } from "react-redux";
 import { addTag, editBook } from "../actions/bookActions";
 
-function EditBookForm(props) {
-  const { toggleEdit, book, addTag, editBook } = props;
+function EditBookForm({ toggleEdit, book, addTag, editBook }) {
   const [newTagName, setNewTagName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [editFormData, setEditFormData] = useState({
@@ -80,9 +79,9 @@ function EditBookForm(props) {
           />
         </div>
         <div className="d-flex my-2">
-          {book.tags.map((tag, index) =>
+          {book.tags.map((tag) =>
             tag !== null ? (
-              <Tag key={index} tagName={tag} edit={true} book={book} />
+              <Tag key={tag.id} tagName={tag} edit={true} book={book} />
             ) : null
           )}
           <input

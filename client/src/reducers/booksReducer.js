@@ -17,6 +17,11 @@ const initialState = {
   },
 };
 
+/**
+ * @param {book[]} books
+ * @param {Object} filter
+ * @returns new array of books
+ */
 export const filterBooks = (books, filter) => {
   const filterString = filter.string.toLowerCase();
   return books

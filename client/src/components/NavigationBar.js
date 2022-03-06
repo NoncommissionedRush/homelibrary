@@ -3,12 +3,12 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import axios from "axios";
 
-function NavigationBar(props) {
+function NavigationBar({ isLoggedIn, setIsLoggedIn, setShowLoginForm }) {
   const logout = async () => {
     const response = await axios.get("/logout");
 
     if (response.data) {
-      props.setIsLoggedIn(false);
+      setIsLoggedIn(false);
     }
   };
   return (
@@ -18,7 +18,7 @@ function NavigationBar(props) {
       className="mb-5 px-3 d-flex justify-content-between"
     >
       <Navbar.Brand>Beďova a Zuzkina Knižnica</Navbar.Brand>
-      {props.isLoggedIn ? (
+      {isLoggedIn ? (
         <Nav>
           <Nav.Link href="#home" onClick={logout}>
             Odhlásiť
@@ -26,7 +26,7 @@ function NavigationBar(props) {
         </Nav>
       ) : (
         <Nav>
-          <Nav.Link href="#" onClick={props.setShowLoginForm}>
+          <Nav.Link href="#" onClick={setShowLoginForm}>
             Prihlásiť
           </Nav.Link>
         </Nav>

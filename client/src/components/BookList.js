@@ -12,9 +12,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-function BookList(props) {
-  const { isLoggedIn, getBooks, displayedBooks } = props;
-
+function BookList({ isLoggedIn, getBooks, displayedBooks }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +21,7 @@ function BookList(props) {
       setIsLoading(!response);
     };
     fetchBooks();
-  }, [getBooks, isLoading]);
+  }, [getBooks]);
 
   return isLoading ? (
     <div
@@ -44,7 +42,7 @@ function BookList(props) {
       <Accordion defaultActiveKey="0" style={{ marginTop: "1rem" }}>
         {displayedBooks.map((book, index) => (
           <BookListItem
-            key={index}
+            key={book.id}
             index={index}
             book={book}
             isLoggedIn={isLoggedIn}
