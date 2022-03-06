@@ -1,16 +1,19 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import Fab from "@mui/material/Fab";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import { Provider } from "react-redux";
+import store from "./store";
+import axios from "axios";
+// icons
+import AddIcon from "@mui/icons-material/Add";
+import CancelIcon from "@mui/icons-material/Cancel";
+import Fab from "@mui/material/Fab";
+// components
 import AddForm from "./components/AddForm";
 import BookList from "./components/BookList";
 import LoginForm from "./components/LoginForm";
 import NavigationBar from "./components/NavigationBar";
 import SearchBar from "./components/SearchBar";
-import store from "./store";
+import Overlay from "./components/Overlay";
 
 function App() {
   const [showAddForm, setShowAddForm] = useState(false);
@@ -36,10 +39,12 @@ function App() {
     <Provider store={store}>
       <div className="App">
         {showLoginForm && (
-          <LoginForm
-            setIsLoggedIn={setIsLoggedIn}
-            setShowLoginForm={setShowLoginForm}
-          />
+          <Overlay toggleDisplay={setShowLoginForm}>
+            <LoginForm
+              setIsLoggedIn={setIsLoggedIn}
+              setShowLoginForm={setShowLoginForm}
+            />
+          </Overlay>
         )}
         <NavigationBar
           setShowLoginForm={setShowLoginForm}
@@ -67,4 +72,4 @@ function App() {
   );
 }
 
-export default React.memo(App);
+export default App;
