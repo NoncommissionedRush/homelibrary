@@ -1,9 +1,10 @@
 import pool from "../config.js";
 
 /** returns all books from the database */
-const getBooks = (_, res) => {
-  pool.query(
-    `SELECT book.id, book.title, book.note, book.read, author.name as author, book.tags 
+const getBooks = async (_, res) => {
+  try {
+    const response = await pool.query(
+      `SELECT book.id, book.title, book.note, book.read, author.name as author, book.tags 
     FROM (
       SELECT book.id, book.title, book.note, book.read, book.author_id, array_agg(tag.tag) as tags
       FROM book
@@ -15,15 +16,13 @@ const getBooks = (_, res) => {
     ) book 
     INNER JOIN author 
     ON book.author_id=author.id 
-    ORDER BY lower(book.title)`,
-    (error, result) => {
-      if (error) {
-        throw error;
-      }
+    ORDER BY lower(book.title)`
+    );
 
-      res.status(200).json(result.rows);
-    }
-  );
+    res.status(200).json(response.rows);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default getBooks;
