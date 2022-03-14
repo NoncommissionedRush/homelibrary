@@ -1,11 +1,11 @@
 import express from "express";
-import getBooks from "../queries/getBooks.js";
-import getBook from "../queries/getBook.js";
-import createBook from "../queries/createBook.js";
-import updateBook from "../queries/updateBook.js";
-import deleteBook from "../queries/deleteBook.js";
-import { addTagToBookRequestHandler } from "../queries/addTagToBook.js";
-import { removeTagFromBookRequestHandler } from "../queries/removeTagFromBook.js";
+import getBooks from "../controllers/books/getBooks.js";
+import { addTagToBookRequestHandler } from "../controllers/books/addTagToBook.js";
+import createBook from "../controllers/books/createBook.js";
+import deleteBook from "../controllers/books/deleteBook.js";
+import getBook from "../controllers/books/getBook.js";
+import { removeTagFromBookRequestHandler } from "../controllers/books/removeTagFromBook.js";
+import updateBook from "../controllers/books/updateBook.js";
 import { login, logout, me, register } from "../users.js";
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-import pool from "../config.js";
+import pool from "../../config.js";
 import createTag from "./createTag.js";
 
 export const addTagToBookRequestHandler = async (req, res) => {

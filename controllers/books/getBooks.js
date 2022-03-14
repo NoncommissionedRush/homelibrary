@@ -1,4 +1,4 @@
-import pool from "../config.js";
+import pool from "../../config.js";
 
 /** returns all books from the database */
 const getBooks = async (_, res) => {

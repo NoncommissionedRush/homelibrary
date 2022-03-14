@@ -1,4 +1,4 @@
-import pool from "../config.js";
+import pool from "../../config.js";
 
 /** adds a new author to dtabase
  * @param   {String}  name  author's name

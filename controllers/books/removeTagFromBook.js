@@ -1,4 +1,4 @@
-import pool from "../config.js";
+import pool from "../../config.js";
 import deleteOrphanTags from "./deleteOrphanTags.js";
 
 export const removeTagFromBookRequestHandler = async (req, res) => {
