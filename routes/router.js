@@ -1,4 +1,5 @@
 import express from "express";
+// books
 import getBooks from "../controllers/books/getBooks.js";
 import { addTagToBookRequestHandler } from "../controllers/books/addTagToBook.js";
 import createBook from "../controllers/books/createBook.js";
@@ -6,7 +7,12 @@ import deleteBook from "../controllers/books/deleteBook.js";
 import getBook from "../controllers/books/getBook.js";
 import { removeTagFromBookRequestHandler } from "../controllers/books/removeTagFromBook.js";
 import updateBook from "../controllers/books/updateBook.js";
-import { login, logout, me, register } from "../users.js";
+// users
+import login from "../controllers/users/login.js";
+import logout from "../controllers/users/logout.js";
+import register from "../controllers/users/register.js";
+import me from "../controllers/users/me.js";
+
 const router = express.Router();
 
 //@route  GET /books
@@ -54,20 +60,3 @@ router.post("/book_tag/:bookId", addTagToBookRequestHandler);
 router.delete("/book_tag/:bookId", removeTagFromBookRequestHandler);
 
 export default router;
-
-// sql query to get books with tags
-// SELECT book.id, book.title, array_agg(tag.tag)
-// FROM book
-// FULL JOIN book_tag bt
-// ON bt.book_id = book.id
-// FULL JOIN tag
-// ON tag.id = bt.tag_id
-// GROUP BY book.id;
-
-// sql query to delete orphans from tag table
-// DELETE FROM tag
-// USING tag as t
-// LEFT JOIN book_tag bt
-// ON bt.tag_id = t.id
-// WHERE tag.id = t.id
-// AND bt.tag_id IS NULL;
