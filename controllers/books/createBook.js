@@ -22,27 +22,26 @@ const createBook = async (req, res) => {
   }
 
   try {
-    const existingAuthor = await pool.query(
-      "SELECT id FROM author WHERE name = $1",
-      [author]
-    );
+    const {
+      rows: [existingAuthor],
+    } = await pool.query("SELECT id FROM author WHERE name = $1", [author]);
 
-    if (existingAuthor.rows[0] != undefined) {
-      authorId = parseInt(existingAuthor.rows[0].id);
+    if (existingAuthor != undefined) {
+      authorId = parseInt(existingAuthor.id);
     } else {
       authorId = await addNewAuthorToDatabase(author);
     }
 
-    const newBookEntry = await pool.query(
+    const {
+      rows: [newBook],
+    } = await pool.query(
       "INSERT INTO book (title, author_id, note, read) VALUES ($1, $2, $3, $4) RETURNING id",
       [title, authorId, note, read]
     );
 
-    const newBookId = newBookEntry.rows[0].id;
+    await addTagToBook(tag, newBook.id);
 
-    await addTagToBook(tag, newBookId);
-
-    res.send(newBookId.toString());
+    res.send(newBook.id.toString());
   } catch (error) {
     console.log(error);
   }

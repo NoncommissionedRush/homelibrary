@@ -11,13 +11,15 @@ const register = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   try {
-    const result = await pool.query(
+    const {
+      rows: [newUser],
+    } = await pool.query(
       "INSERT INTO users (name, password) VALUES ($1, $2) RETURNING id",
       [name, hashedPassword]
     );
 
-    req.session.userId = result.rows[0].id;
-    res.status(200).send(result.rows[0]);
+    req.session.userId = newUser.id;
+    res.status(200).send(newUser);
   } catch (error) {
     console.log(error);
   }

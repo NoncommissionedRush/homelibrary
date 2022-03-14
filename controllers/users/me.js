@@ -6,10 +6,13 @@ import pool from "../../config.js";
 const me = async (req, res) => {
   if (req.session.userId) {
     try {
-      const user = await pool.query("SELECT * FROM users WHERE id = $1", [
+      const {
+        rows: [user],
+      } = await pool.query("SELECT * FROM users WHERE id = $1", [
         req.session.userId,
       ]);
-      res.status(200).send(user.rows[0]);
+
+      res.status(200).send(user);
     } catch (error) {
       console.log(error);
     }

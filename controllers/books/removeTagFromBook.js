@@ -23,11 +23,9 @@ export const removeTagFromBookRequestHandler = async (req, res) => {
 const removeTagFromBook = async (tagName, bookId) => {
   if (typeof bookId !== "number") return false;
   try {
-    const queryResult = await pool.query("SELECT * FROM tag WHERE tag = $1", [
-      tagName,
-    ]);
-
-    const existingTag = queryResult.rows[0];
+    const {
+      rows: [existingTag],
+    } = await pool.query("SELECT * FROM tag WHERE tag = $1", [tagName]);
 
     // if the tag does not exist return false
     if (existingTag === undefined) return false;

@@ -6,12 +6,13 @@ import pool from "../../config.js";
  */
 const addNewAuthorToDatabase = async (name) => {
   try {
-    const result = await pool.query(
-      "INSERT INTO author (name) VALUES ($1) RETURNING id",
-      [name]
-    );
+    const {
+      rows: [newAuthor],
+    } = await pool.query("INSERT INTO author (name) VALUES ($1) RETURNING id", [
+      name,
+    ]);
 
-    return result.rows[0].id;
+    return newAuthor.id;
   } catch (error) {
     console.log(error);
   }

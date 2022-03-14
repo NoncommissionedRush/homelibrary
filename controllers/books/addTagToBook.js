@@ -18,15 +18,14 @@ const addTagToBook = async (tagName, bookId) => {
   if (typeof tagName !== "string" || tagName.length < 1) return false;
 
   try {
-    const existingTag = await pool.query("SELECT * FROM tag WHERE tag = $1", [
-      tagName,
-    ]);
+    const {
+      rows: [existingTag],
+    } = await pool.query("SELECT * FROM tag WHERE tag = $1", [tagName]);
 
     let tagId;
 
-    // if the tag exists add existing else create a new one
-    if (existingTag.rows[0] != undefined) {
-      tagId = existingTag.rows[0].id;
+    if (existingTag != undefined) {
+      tagId = existingTag.id;
     } else {
       const newTagId = await createTag(tagName);
       tagId = newTagId;

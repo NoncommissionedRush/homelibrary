@@ -3,11 +3,11 @@ import pool from "../../config.js";
 /** returns all books from the database */
 const getBook = async (req, res) => {
   const bookId = parseInt(req.params.id);
+
   try {
-    const result = await pool.query(
-      `
+    const queryString = `
       SELECT book.id, book.title, book.note, book.read, author.name as author, book.tags 
-    FROM (
+      FROM (
       SELECT book.id, book.title, book.note, book.read, book.author_id, array_agg(tag.tag) as tags
       FROM book
       FULL JOIN book_tag bt
@@ -18,12 +18,13 @@ const getBook = async (req, res) => {
     ) book 
     INNER JOIN author 
     ON book.author_id=author.id 
-    WHERE book.id = $1
-       `,
-      [bookId]
-    );
+    WHERE book.id = $1`;
 
-    res.send(result.rows[0]);
+    const {
+      rows: [book],
+    } = await pool.query(queryString, [bookId]);
+
+    res.send(book);
   } catch (error) {
     console.log(error);
   }

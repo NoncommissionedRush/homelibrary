@@ -6,11 +6,11 @@ import pool from "../../config.js";
  */
 const getUserByName = async (name) => {
   try {
-    const result = await pool.query("SELECT * FROM users WHERE name = $1", [
-      name,
-    ]);
+    const {
+      rows: [user],
+    } = await pool.query("SELECT * FROM users WHERE name = $1", [name]);
 
-    return result.rows[0];
+    return user;
   } catch (error) {
     console.log(error);
   }
