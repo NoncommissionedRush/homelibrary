@@ -1,6 +1,8 @@
 import pool from "../../config.js";
 import addNewAuthorToDatabase from "./addAuthorToDb.js";
 import addTagToBook from "./addTagToBook.js";
+import { clearCache } from "../../services/pgCache.js";
+import { getBooksQueryString } from "./getBooks.js";
 
 /** add new book to database
  * @return {Object} new book object
@@ -42,6 +44,7 @@ const createBook = async (req, res) => {
     await addTagToBook(tag, newBook.id);
 
     res.send(newBook.id.toString());
+    clearCache(getBooksQueryString);
   } catch (error) {
     console.log(error);
   }

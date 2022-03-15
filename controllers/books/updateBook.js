@@ -1,5 +1,7 @@
 import pool from "../../config.js";
 import addNewAuthorToDatabase from "./addAuthorToDb.js";
+import { clearCache } from "../../services/pgCache.js";
+import { getBooksQueryString } from "./getBooks.js";
 
 /** update existing book
  * @return {Integer} updated book's id
@@ -30,10 +32,10 @@ const updateBook = async (req, res) => {
       "UPDATE book SET title = $1, author_id = $2, note = $3, read = $4 WHERE id = $5 RETURNING id",
       [title, authorId, note, read, bookId]
     );
-
     const updatedBookId = updatedBook.id;
 
     res.send(updatedBookId.toString());
+    clearCache(getBooksQueryString);
   } catch (error) {
     console.log(error);
   }
