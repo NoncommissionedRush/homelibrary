@@ -55,31 +55,6 @@ export const deleteBook = (id) => async (dispatch) => {
   });
 };
 
-export const editBook = (id, editFormData) => async (dispatch) => {
-  let read;
-
-  if (editFormData["checkbox-bedo"] && editFormData["checkbox-zuzka"]) {
-    read = 3;
-  } else if (editFormData["checkbox-zuzka"]) {
-    read = 2;
-  } else if (editFormData["checkbox-bedo"]) {
-    read = 1;
-  } else {
-    read = 0;
-  }
-
-  const data = {
-    title: editFormData.title,
-    author: editFormData.author,
-    note: editFormData.note,
-    read: read,
-  };
-
-  await axios.put(`/book/${id}`, data, AXIOS_REQUEST_CONFIG);
-
-  dispatch(getBooks());
-};
-
 export const setFilter = (filter) => (dispatch) => {
   dispatch({
     type: SET_FILTER,
@@ -165,7 +140,7 @@ export const updateBook = (bookId, editFormData) => async (dispatch) => {
       AXIOS_REQUEST_CONFIG
     );
 
-    const updatedBook = await axios.get(`/book/${updatedBookId}`);
+    const updatedBook = await axios.get(`/book/${updatedBookId.data}`);
 
     if (!updatedBook.data) return false;
 
