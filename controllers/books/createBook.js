@@ -28,7 +28,7 @@ const createBook = async (req, res) => {
       rows: [existingAuthor],
     } = await pool.query("SELECT id FROM author WHERE name = $1", [author]);
 
-    if (existingAuthor != undefined) {
+    if (existingAuthor) {
       authorId = parseInt(existingAuthor.id);
     } else {
       authorId = await addNewAuthorToDatabase(author);

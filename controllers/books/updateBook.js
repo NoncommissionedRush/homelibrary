@@ -11,16 +11,14 @@ const updateBook = async (req, res) => {
   let { title, author, note, read } = req.body;
   let authorId;
 
-  if (read === undefined) {
-    read = 0;
-  }
+  if (!read) read = 0;
 
   try {
     const {
       rows: [existingAuthor],
     } = await pool.query("SELECT id FROM author WHERE name = $1", [author]);
 
-    if (existingAuthor != undefined) {
+    if (existingAuthor) {
       authorId = parseInt(existingAuthor.id);
     } else {
       authorId = await addNewAuthorToDatabase(author);

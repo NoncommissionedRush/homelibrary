@@ -24,7 +24,7 @@ const addTagToBook = async (tagName, bookId) => {
 
     let tagId;
 
-    if (existingTag != undefined) {
+    if (existingTag) {
       tagId = existingTag.id;
     } else {
       const newTagId = await createTag(tagName);

@@ -100,7 +100,7 @@ export const addTag = (bookId, tag) => async (dispatch) => {
 
     const updatedBook = await axios.get(`/book/${bookId}`);
 
-    if (updatedBook.data === undefined) return false;
+    if (!updatedBook.data) return false;
 
     dispatch({
       type: ADD_TAG,

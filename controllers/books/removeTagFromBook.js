@@ -28,7 +28,7 @@ const removeTagFromBook = async (tagName, bookId) => {
     } = await pool.query("SELECT * FROM tag WHERE tag = $1", [tagName]);
 
     // if the tag does not exist return false
-    if (existingTag === undefined) return false;
+    if (!existingTag) return false;
 
     const result = await pool.query(
       "DELETE FROM book_tag WHERE book_id = $1 AND tag_id = $2",
