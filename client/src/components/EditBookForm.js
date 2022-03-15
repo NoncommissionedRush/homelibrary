@@ -3,9 +3,9 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Tag from "./Tag";
 import { connect } from "react-redux";
-import { addTag, editBook } from "../actions/bookActions";
+import { addTag, updateBook } from "../actions/bookActions";
 
-function EditBookForm({ toggleEdit, book, addTag, editBook }) {
+function EditBookForm({ toggleEdit, book, addTag, updateBook }) {
   const [newTagName, setNewTagName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [editFormData, setEditFormData] = useState({
@@ -96,7 +96,7 @@ function EditBookForm({ toggleEdit, book, addTag, editBook }) {
       <div className="d-flex flex-column">
         <Button
           onClick={() => {
-            editBook(book.id, editFormData);
+            updateBook(book.id, editFormData);
             toggleEdit();
           }}
           variant="primary"
@@ -111,4 +111,4 @@ function EditBookForm({ toggleEdit, book, addTag, editBook }) {
   );
 }
 
-export default connect(null, { addTag, editBook })(EditBookForm);
+export default connect(null, { addTag, updateBook })(EditBookForm);
