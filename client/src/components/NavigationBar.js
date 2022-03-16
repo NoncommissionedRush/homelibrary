@@ -1,15 +1,11 @@
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import axios from "axios";
 
 function NavigationBar({ isLoggedIn, setIsLoggedIn, setShowLoginForm }) {
   const logout = async () => {
-    const response = await axios.get("/logout");
-
-    if (response.data) {
-      setIsLoggedIn(false);
-    }
+    localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
   };
   return (
     <Navbar

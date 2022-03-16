@@ -25,7 +25,14 @@ function App() {
   }, []);
 
   async function checkLogin() {
-    const response = await axios.get("/me");
+    const response = await axios({
+      url: "/me",
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": localStorage.getItem("jwt"),
+      },
+    });
     if (response.data) {
       setIsLoggedIn(true);
     }

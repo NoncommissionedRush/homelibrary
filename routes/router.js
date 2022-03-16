@@ -12,6 +12,8 @@ import login from "../controllers/users/login.js";
 import logout from "../controllers/users/logout.js";
 import register from "../controllers/users/register.js";
 import me from "../controllers/users/me.js";
+//middleware
+import authMiddleware from "../services/authMiddleware.js";
 
 const router = express.Router();
 
@@ -49,7 +51,7 @@ router.get("/logout", logout);
 
 //@route  GET /me
 //@desc return current user object
-router.get("/me", me);
+router.get("/me", authMiddleware, me);
 
 //@route  POST /book_tag/:bookId
 //@desc add tag to book

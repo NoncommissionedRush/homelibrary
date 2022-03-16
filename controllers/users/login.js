@@ -1,5 +1,7 @@
 import getUserByName from "./getUserByName.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 /** login user and save userId to session
  * @return {Object} user object
@@ -36,8 +38,22 @@ const login = async (req, res) => {
       });
     }
 
-    req.session.userId = existingUser.id;
-    res.status(200).send(existingUser);
+    const payload = {
+      user: {
+        id: existingUser.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: 3600 },
+      (err, token) => {
+        if (err) throw err;
+
+        res.json({ token });
+      }
+    );
   } catch (error) {
     console.log(error);
   }

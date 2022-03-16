@@ -33,7 +33,8 @@ function LoginForm({ setIsLoggedIn, toggleDisplay }) {
       return;
     }
 
-    if (response.data.id) {
+    if (response.data) {
+      localStorage.setItem("jwt", response.data.token);
       setIsLoggedIn(true);
       toggleDisplay(false);
     }

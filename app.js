@@ -1,8 +1,5 @@
 import express from "express";
 import router from "./routes/router.js";
-import session from "express-session";
-import { sessionConfig } from "./config.js";
-import "dotenv/config";
 import * as path from "path";
 import { fileURLToPath } from "url";
 
@@ -13,8 +10,6 @@ const app = express();
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/build")));
-
-app.use(session(sessionConfig));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

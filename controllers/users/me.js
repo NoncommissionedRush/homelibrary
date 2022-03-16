@@ -1,21 +1,10 @@
-import pool from "../../config.js";
-
 /** return user if there is userId in session
  * @return {Object} user
  */
 const me = async (req, res) => {
-  if (req.session.userId) {
-    try {
-      const {
-        rows: [user],
-      } = await pool.query("SELECT * FROM users WHERE id = $1", [
-        req.session.userId,
-      ]);
-
-      res.status(200).send(user);
-    } catch (error) {
-      console.log(error);
-    }
+  const user = res.locals.user;
+  if (user) {
+    res.send(user);
   } else {
     res.send(undefined);
   }
