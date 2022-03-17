@@ -1,7 +1,10 @@
 import pool from "../config.js";
 import redis from "redis";
+import "dotenv/config";
 
-const client = redis.createClient();
+const client = redis.createClient({
+  url: process.env.REDIS_URL || "redis://127.0.0.1:6379",
+});
 client.connect();
 
 client.on("error", (err) => {
@@ -44,6 +47,7 @@ const Query = async (query, params, expiration) => {
   const cacheResult = await client.get(key);
 
   if (cacheResult) {
+    console.log("serving from cache");
     return JSON.parse(cacheResult);
   }
 
