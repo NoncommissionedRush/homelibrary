@@ -1,3 +1,12 @@
 {
-    "routes": [{ "src": "/(.*)", "dest": "/app.js" }]
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/app.js"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/client/build/$1"
+        }
+    ]
 }
