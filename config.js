@@ -1,16 +1,10 @@
-import pg from "pg";
-const { Pool } = pg;
+import { createClient } from "@supabase/supabase-js";
 import "dotenv/config";
 
-// db access
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-  ssl: { rejectUnauthorized: false },
-});
+// supabase client
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // cookie config
 export const sessionConfig = {
@@ -25,5 +19,3 @@ export const sessionConfig = {
   secret: process.env.SESSION_SECRET,
   resave: false,
 };
-
-export default pool;

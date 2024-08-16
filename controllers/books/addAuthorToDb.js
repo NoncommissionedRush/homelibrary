@@ -1,4 +1,4 @@
-import pool from "../../config.js";
+import { supabase } from "../../config";
 
 /** adds a new author to dtabase
  * @param   {String}  name  author's name
@@ -6,13 +6,11 @@ import pool from "../../config.js";
  */
 const addNewAuthorToDatabase = async (name) => {
   try {
-    const {
-      rows: [newAuthor],
-    } = await pool.query("INSERT INTO author (name) VALUES ($1) RETURNING id", [
-      name,
-    ]);
+    const { data, error } = await supabase.from('author').insert([{name}]).select('id').single();
 
-    return newAuthor.id;
+    if(error) throw error;
+
+    return data.id;
   } catch (error) {
     console.log(error);
   }

@@ -1,4 +1,4 @@
-import pool from "../../config.js";
+import { supabase } from "../../config.js";
 import deleteOrphanTags from "./deleteOrphanTags.js";
 
 /** delete book from database
@@ -11,7 +11,15 @@ const deleteBook = async (req, res) => {
   }
   try {
     // delete book from db
-    await pool.query("DELETE FROM book WHERE id = $1", [bookId]);
+    const { error: deleteError } = await supabase
+      .from('book')
+      .delete()
+      .eq('id', bookId)
+
+    if(deleteError) {
+      throw deleteError
+    }
+    
     // delete orphan tags if there are any
     await deleteOrphanTags();
     res.send(true);
