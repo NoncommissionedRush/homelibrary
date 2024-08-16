@@ -1,4 +1,4 @@
-import pool from "../../config.js";
+import { supabase } from "../../config.js";
 import deleteOrphanTags from "./deleteOrphanTags.js";
 
 export const removeTagFromBookRequestHandler = async (req, res) => {
@@ -23,20 +23,21 @@ export const removeTagFromBookRequestHandler = async (req, res) => {
 const removeTagFromBook = async (tagName, bookId) => {
   if (typeof bookId !== "number") return false;
   try {
-    const {
-      rows: [existingTag],
-    } = await pool.query("SELECT * FROM tag WHERE tag = $1", [tagName]);
+    const { data: existingTag, error: selectError } = await supabase
+      .from('tag')
+      .select('*')
+      .eq('tag', tagName)
+      .single()
 
-    // if the tag does not exist return false
-    if (!existingTag) return false;
+    if(selectError || !existingTag) return false;
 
-    const result = await pool.query(
-      "DELETE FROM book_tag WHERE book_id = $1 AND tag_id = $2",
-      [bookId, existingTag.id]
-    );
+    const { error: deleteError, count } = await supabase
+      .from('book_tag')
+      .delete()
+      .eq('book_id', bookId)
+      .eq('tag_id', existingTag.id)
 
-    // if nothing was deleted, ie. bookId does not exist, return false
-    if (result.rowCount === 0) {
+    if(deleteError || count === 0) {
       return false;
     }
 
@@ -45,6 +46,7 @@ const removeTagFromBook = async (tagName, bookId) => {
     return true;
   } catch (error) {
     console.log(error);
+    return false;
   }
 };
 

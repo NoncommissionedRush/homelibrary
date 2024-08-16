@@ -1,4 +1,4 @@
-import pool from "../../config.js";
+import { supabase } from "../../config";
 
 /** returns all books from the database */
 const getBook = async (req, res) => {
@@ -21,8 +21,14 @@ const getBook = async (req, res) => {
     WHERE book.id = $1`;
 
     const {
-      rows: [book],
-    } = await pool.query(queryString, [bookId]);
+      data: books, error
+    } = await supabase.rpc('execute_sql', { sql: queryString, params: [bookId] });
+
+    if(error) {
+      throw error
+    }
+
+    const book = books[0]
 
     res.send(book);
   } catch (error) {

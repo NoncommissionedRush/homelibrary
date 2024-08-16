@@ -1,4 +1,4 @@
-import pool from "../../config.js";
+import { supabase } from "../../config";
 
 /** find user by name
  * @param   {String}  name  user's name
@@ -6,9 +6,15 @@ import pool from "../../config.js";
  */
 const getUserByName = async (name) => {
   try {
-    const {
-      rows: [user],
-    } = await pool.query("SELECT * FROM users WHERE name = $1", [name]);
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('name', name)
+      .single()
+
+    if(error) {
+      throw error;
+    }
 
     return user;
   } catch (error) {

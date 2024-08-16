@@ -1,10 +1,18 @@
-import pool from "../../config.js";
+import { supabase } from "../../config";
 
 const deleteOrphanTags = async () => {
   try {
-    await pool.query(
-      "DELETE FROM tag USING tag AS t LEFT JOIN book_tag bt ON bt.tag_id = t.id WHERE tag.id = t.id AND bt.tag_id IS NULL"
-    );
+    const { error } = await supabase
+      .from('tag')
+      .delete()
+      .using('tag')
+      .leftJoin('book_tag', 'book_tag.tag_id', 'tag.id')
+      .is('book_tag.tag_id', null)
+
+    if(error) {
+      throw error
+    }
+    
   } catch (error) {
     console.log(error);
   }

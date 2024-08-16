@@ -1,4 +1,4 @@
-import pool from "../../config.js";
+import { supabase } from "../../config.js";
 import addNewAuthorToDatabase from "./addAuthorToDb.js";
 import { clearCache } from "../../services/pgCache.js";
 import { getBooksQueryString } from "./getBooks.js";
@@ -14,9 +14,16 @@ const updateBook = async (req, res) => {
   if (!read) read = 0;
 
   try {
-    const {
-      rows: [existingAuthor],
-    } = await pool.query("SELECT id FROM author WHERE name = $1", [author]);
+    const { data: existingAuthor, error: selectError } = await supabase
+      .from('author')
+      .select('id')
+      .eq('name', author)
+      .single()
+
+    if(selectError && selectError.code !== 'PGRST116'){
+      console.log(selectError)
+      return res.status(500).send({errorMessage: "Error checking author"})
+    }
 
     if (existingAuthor) {
       authorId = parseInt(existingAuthor.id);
@@ -24,18 +31,26 @@ const updateBook = async (req, res) => {
       authorId = await addNewAuthorToDatabase(author);
     }
 
-    const {
-      rows: [updatedBook],
-    } = await pool.query(
-      "UPDATE book SET title = $1, author_id = $2, note = $3, read = $4 WHERE id = $5 RETURNING id",
-      [title, authorId, note, read, bookId]
-    );
+    const { data: updatedBook, error: updateError } = await supabase
+      .from('book')
+      .update({title, author_id: authorId, note, read })
+      .eq('id', bookId)
+      .select('id')
+      .single()
+
+    if(updateError) {
+      console.log(updateError)
+      return res.status(500).send({errorMessage: "Error updating book"})
+    }
+
     const updatedBookId = updatedBook.id;
 
     res.send(updatedBookId.toString());
+
     clearCache(getBooksQueryString);
   } catch (error) {
     console.log(error);
+    res.status(500).send({errorMessage: "Internal server error"})
   }
 };
 

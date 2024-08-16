@@ -1,4 +1,4 @@
-import pool from "../../config.js";
+import { supabase } from "../../config.js";
 import createTag from "./createTag.js";
 
 export const addTagToBookRequestHandler = async (req, res) => {
@@ -18,9 +18,13 @@ const addTagToBook = async (tagName, bookId) => {
   if (typeof tagName !== "string" || tagName.length < 1) return false;
 
   try {
-    const {
-      rows: [existingTag],
-    } = await pool.query("SELECT * FROM tag WHERE tag = $1", [tagName]);
+    let { data: existingTag, error: selectError } = await supabase.from('tag').select('*').eq('tag', tagName).single();
+
+    if(selectError && selectError.code !== 'PGRST116') {
+      // handle errors other that "no rows found"
+      console.log(selectError)
+      return false;
+    }
 
     let tagId;
 
@@ -31,10 +35,12 @@ const addTagToBook = async (tagName, bookId) => {
       tagId = newTagId;
     }
 
-    await pool.query(
-      "INSERT INTO book_tag (book_id, tag_id) VALUES ($1, $2) RETURNING *",
-      [bookId, tagId]
-    );
+    const { error: insertError } = await supabase.from('book_tag').insert([{book_id: bookId, tag_id: tagId }])
+
+    if(insertError) {
+      console.log(insertError)
+      return false;
+    }
 
     return true;
   } catch (error) {

@@ -1,12 +1,16 @@
-import pool from "../../config.js";
+import { supabase } from "../../config";
 
 const addNewTagtoDb = async (tagName) => {
   try {
-    const {
-      rows: [newTag],
-    } = await pool.query("INSERT INTO tag (tag) VALUES ($1) RETURNING id", [
-      tagName,
-    ]);
+    const {data: newTag, error } = await supabase
+      .from('tag')
+      .insert([{ tag: tagName }])
+      .select('id')
+      .single()
+
+    if(error) {
+      throw error
+    }
 
     return newTag.id;
   } catch (error) {
