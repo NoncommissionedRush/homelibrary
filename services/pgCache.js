@@ -1,7 +1,7 @@
 import { supabase } from '../config.js';
 import NodeCache from 'node-cache';
+import { SupabaseViews } from '../client/src/supabase-views.enum.js';
 import 'dotenv/config';
-import { SupabaseViews } from '../client/src/supabase-functions.enum.js';
 
 const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 

@@ -1,5 +1,5 @@
-import { SupabaseViews } from '../../client/src/supabase-functions.enum.js';
 import Query from '../../services/pgCache.js';
+import { SupabaseViews } from '../../client/src/supabase-views.enum.js';
 
 /** returns all books from the database */
 const getBooks = async (_, res) => {
