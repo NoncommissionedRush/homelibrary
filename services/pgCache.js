@@ -6,7 +6,11 @@ import 'dotenv/config';
 const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
 const createKey = (query, params) => {
-    return 'postgres:' + query + JSON.stringify(params);
+    const key = 'postgres:' + query;
+    if (params) {
+        key += JSON.stringify(params);
+    }
+    return key;
 };
 
 /**
@@ -54,7 +58,7 @@ const Query = async (supabaseView, expiration) => {
         return [];
     }
 
-    cache.set(key, JSON.stringify(data), expiration);
+    cache.set(supabaseView, JSON.stringify(data), expiration);
 
     return data;
 };
